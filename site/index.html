@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore NASA satellite heat detections across California.">
+  <meta name="theme-color" content="#101915">
+  <title>CrisisTwin | California Wildfire Monitor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script defer src="dashboard.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="./" aria-label="CrisisTwin home"><span class="brand-icon" aria-hidden="true">◈</span>CrisisTwin</a>
+    <nav aria-label="Main navigation"><a href="#map-explorer">Map</a><a href="#daily-activity">Activity</a><a href="#sources">Sources</a></nav>
+    <span id="feed-status" class="status" role="status">Loading NASA feed</span>
+  </header>
+  <main>
+    <section class="intro">
+      <div>
+        <p class="eyebrow">CALIFORNIA WILDFIRE MONITOR</p>
+        <h1>See what satellites<br> are picking up<span>.</span></h1>
+        <p class="intro-text">Explore recent heat detections across California and see which counties have recorded signals.</p>
+      </div>
+      <aside class="source-card"><span class="orb" aria-hidden="true">✦</span><div><b>NASA FIRMS · NOAA-20</b><span id="timestamp">Waiting for the latest snapshot</span><span id="observation"></span></div></aside>
+    </section>
+    <p id="notice" class="notice" role="status">Dots mark satellite heat detections. For confirmed incidents or evacuation information, check <a href="https://www.fire.ca.gov/incidents" target="_blank" rel="noopener">CAL FIRE</a> and local officials.</p>
+    <section class="metrics" aria-label="Current view metrics">
+      <article><span>Heat detections</span><strong id="detection-count">—</strong><small>Individual satellite readings</small></article>
+      <article><span>Counties with detections</span><strong id="county-count">—</strong><small>Within the selected view</small></article>
+      <article><span>High confidence</span><strong id="high-count">—</strong><small>Readings labeled high by NASA</small></article>
+      <article><span>Most recent detection</span><strong id="latest-age">—</strong><small>At the time of the snapshot</small></article>
+    </section>
+    <section class="explorer" id="map-explorer" aria-labelledby="map-title">
+      <section class="panel map-panel">
+        <div class="panel-heading"><div><h2 id="map-title">Detection map</h2><p>Zoom in or select a dot to inspect a reading.</p></div><button id="reset-map" type="button">Reset view</button></div>
+        <div class="filters" aria-label="Map filters">
+          <label>Time window <select id="window"><option value="24">Past 24 hours</option><option value="48" selected>Past 48 hours</option><option value="168">Past 7 days</option></select></label>
+          <label>County <select id="county"><option value="">All California</option></select></label>
+          <label>Confidence <select id="confidence"><option value="">All levels</option><option value="high">High only</option><option value="nominal">Nominal only</option><option value="low">Low only</option></select></label>
+          <label>Map style <select id="basemap"><option value="dark">Street map</option><option value="satellite">Satellite imagery</option></select></label>
+        </div>
+        <div id="map" aria-label="Interactive California wildfire heat detection map"></div>
+        <div class="legend"><span><i class="fresh"></i> Under 12 hours</span><span><i class="day"></i> 12–24 hours</span><span><i class="old"></i> Older than 24 hours</span><span><i class="outline"></i> County boundary</span></div>
+      </section>
+      <aside class="panel briefing" aria-labelledby="brief-title">
+        <div class="panel-heading"><div><h2 id="brief-title">Field brief</h2><p>Automatically summarized from your filters</p></div></div>
+        <div class="brief-body">
+          <p id="summary" aria-live="polite">Loading detections…</p>
+          <div class="callout" id="county-context"></div>
+          <h3>Explore counties</h3>
+          <div id="ranked" class="ranked"></div>
+        </div>
+      </aside>
+    </section>
+    <section class="panel activity" id="daily-activity">
+      <div class="panel-heading"><div><h2>Detection timeline</h2><p id="trend-note">Daily counts in California time</p></div><a class="button" id="download" download="crisistwin-detections.csv">Download CSV</a></div>
+      <div id="trend" class="chart" role="list" aria-label="Detection counts by time bucket"></div>
+    </section>
+    <section id="sources" class="source-section">
+      <div><h2>How to read this map</h2><p>A satellite can flag fire, agricultural burning, or another heat source. Multiple detections can come from the same place. A blank map can reflect cloud cover, the timing of a satellite pass, or the filters you chose.</p></div>
+      <div><h2>Data and coverage</h2><p>California’s 58 counties use Census boundaries. County populations give geographic context. They don’t count people affected by a fire. Satellite detections come from NOAA‑20 VIIRS and are checked hourly.</p><p><a href="https://firms.modaps.eosdis.nasa.gov/usfs/active_fire/">NASA data</a> · <a href="https://www.census.gov/programs-surveys/popest.html">U.S. Census</a> · <a href="https://github.com/Mykeil-tzul/crisistwin-disaster">Project and methods</a></p></div>
+    </section>
+  </main>
+  <footer>CrisisTwin · California wildfire monitoring portfolio project</footer>
+</body>
+</html>
